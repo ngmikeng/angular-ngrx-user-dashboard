@@ -1,12 +1,22 @@
+import { DynamicEnvironment } from './dynamic-environment';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false,
-  api_url: 'http://localhost:3000/api'
-};
+class Environment extends DynamicEnvironment {
+  production = false;
 
+  constructor() {
+    super();
+  }
+
+  public get apiBaseUrl() {
+    return `${this.getEnvConfig().baseURL}/api/v1`;
+  }
+}
+
+export const environment = new Environment();
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

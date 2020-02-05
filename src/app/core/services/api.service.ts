@@ -16,13 +16,13 @@ export class ApiService {
   }
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
-    return this.http.get(`${environment.api_url}${path}`, { params })
+    return this.http.get(`${environment.apiBaseUrl}${path}`, { params })
       .pipe(catchError(this.formatErrors));
   }
 
   put(path: string, bodyData: any, params: HttpParams = new HttpParams(), finalizeHandler?: VoidFunction): Observable<any> {
     return this.http.put(
-      `${environment.api_url}${path}`,
+      `${environment.apiBaseUrl}${path}`,
       bodyData,
       { params }
     ).pipe(catchError(this.formatErrors))
@@ -35,7 +35,7 @@ export class ApiService {
 
   post(path: string, bodyData: any, params: HttpParams = new HttpParams(), finalizeHandler?: VoidFunction): Observable<any> {
     return this.http.post(
-      `${environment.api_url}${path}`,
+      `${environment.apiBaseUrl}${path}`,
       bodyData,
       { params }
     ).pipe(catchError(this.formatErrors))
@@ -48,7 +48,7 @@ export class ApiService {
 
   delete(path: string, params: HttpParams = new HttpParams(), finalizeHandler?: VoidFunction): Observable<any> {
     return this.http.delete(
-      `${environment.api_url}${path}`,
+      `${environment.apiBaseUrl}${path}`,
       { params }
     ).pipe(catchError(this.formatErrors))
     .pipe(finalize(() => {
@@ -59,7 +59,7 @@ export class ApiService {
   }
 
   postFile(path: string, formData: FormData, httpOptions?, finalizeHandler?: VoidFunction): Observable<any> {
-    const requestUrl = `${environment.api_url}${path}`;
+    const requestUrl = `${environment.apiBaseUrl}${path}`;
 
     return this.http.post(
       requestUrl,
