@@ -1,0 +1,15 @@
+<section>
+  <ng-content select="app-header"></ng-content>
+</section>
+
+<section>
+  <div class="container-fluid">
+    <div class="row">
+      <ng-content select="app-sidebar"></ng-content>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <ng-content select="router-outlet"></ng-content>
+      </main>
+    </div>
+  </div>
+</section>

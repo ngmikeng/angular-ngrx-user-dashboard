@@ -1,0 +1,18 @@
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>Management</span>
+        <a class="d-flex align-items-center text-muted" href="#">
+          <span data-feather="plus-circle"></span>
+        </a>
+      </h6>
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a [routerLink]="[item.path]" [queryParams]="{debug: true}" class="nav-link" routerLinkActive="active">
+          <span data-feather="users"></span>
+          {{ item.title }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
