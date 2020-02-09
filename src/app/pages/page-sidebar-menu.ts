@@ -9,5 +9,9 @@ export const PAGE_SIDEBAR_MENU_ITEMS: IAppMenu[] = [
   {
     title: 'User',
     path: '/pages/users'
+  },
+  {
+    title: 'Post',
+    path: '/pages/posts'
   }
 ]

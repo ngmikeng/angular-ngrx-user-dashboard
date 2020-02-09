@@ -7,6 +7,7 @@ import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.
 import { HeaderComponent, SidebarComponent } from './components';
 import { RouterModule } from '@angular/router';
 import { UsersService } from './services/users.service';
+import { PostsService } from './services/posts.service';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule, RouterModule];
 const LIB_MODULES = [NgbModule];
@@ -15,7 +16,7 @@ const COMPONENTS = [
   HeaderComponent,
   SidebarComponent,
 ];
-const SHARED_PROVIDERS = [UsersService];
+const SHARED_PROVIDERS = [UsersService, PostsService];
 
 @NgModule({
   declarations: [...COMPONENTS],

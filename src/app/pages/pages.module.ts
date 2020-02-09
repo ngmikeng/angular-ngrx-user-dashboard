@@ -4,9 +4,10 @@ import { SharedModule } from '../shared/shared.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
+import { PostsComponent } from './posts/posts.component';
 
 @NgModule({
-  declarations: [PagesComponent, DashboardComponent, UsersComponent],
+  declarations: [PagesComponent, DashboardComponent, UsersComponent, PostsComponent],
   imports: [
     SharedModule,
     PagesRoutingModule
