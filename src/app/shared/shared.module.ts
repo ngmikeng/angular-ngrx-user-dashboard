@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { UsersService } from './services/users.service';
 import { PostsService } from './services/posts.service';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { ThSortableDirective } from './directives/th-sortable.directive';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule, RouterModule];
 const LIB_MODULES = [NgbModule];
@@ -16,7 +17,9 @@ const COMPONENTS = [
   DefaultLayoutComponent,
   HeaderComponent,
   SidebarComponent,
-  PaginationComponent
+  PaginationComponent,
+
+  ThSortableDirective
 ];
 const SHARED_PROVIDERS = [UsersService, PostsService];
 
