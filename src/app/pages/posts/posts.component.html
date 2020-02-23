@@ -13,6 +13,15 @@
         <table class="table table-striped table-inverse table-responsive">
           <thead class="thead-inverse">
             <tr>
+              <th>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="checbox-all"
+                  (change)="$event ? toggleSelectAllItem() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  <label class="custom-control-label" for="checbox-all"></label>
+                </div>
+              </th>
               <th>ID</th>
               <th>Title</th>
               <th>Body</th>
@@ -20,7 +29,16 @@
             </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let post of listPosts$ | async">
+              <tr *ngFor="let post of pageItems | async">
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" [id]="post.id"
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(post) : null"
+                    [checked]="selection.isSelected(post)">
+                    <label class="custom-control-label" [for]="post.id"></label>
+                  </div>
+                </td>
                 <td>{{ post.id }}</td>
                 <td>{{ post.title }}</td>
                 <td>{{ post.body }}</td>

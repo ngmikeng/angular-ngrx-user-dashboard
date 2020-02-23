@@ -1,9 +1,9 @@
 
 export interface IUser {
   id: number;
-  name: "Leanne Graham";
-  username: "Bret";
-  email: "Sincere@april.biz";
+  name: string;
+  username: string;
+  email: string;
   address?: {
     street: string;
     suite: string;
@@ -14,8 +14,8 @@ export interface IUser {
     lat: string;
     lng: string;
   }
-  lat: "-37.3159";
-  lng: "81.1496";
+  lat?: string;
+  lng?: string;
   phone?: string;
   website?: string;
 }
