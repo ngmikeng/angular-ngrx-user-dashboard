@@ -66,4 +66,12 @@ export class PostsComponent implements OnInit {
     return numSelected === numRows;
   }
 
+  createItem() {
+
+  }
+
+  deleteItems() {
+    console.log(this.selection.selected);
+  }
+
 }
