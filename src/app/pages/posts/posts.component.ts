@@ -5,6 +5,9 @@ import { PostsService } from '../../shared/services/posts.service';
 import { flatMap, tap, map } from 'rxjs/operators';
 import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 import { IPost } from '../../shared/models/post.model';
+import { Store, select } from '@ngrx/store';
+import * as postsAction from './posts.action';
+import { IPostState } from './posts.model';
 
 @Component({
   selector: 'app-posts',
@@ -13,7 +16,19 @@ import { IPost } from '../../shared/models/post.model';
 })
 export class PostsComponent implements OnInit {
   selection = new SelectionModel<IPost>(true, []);
-  listPosts$: Observable<any[]>;
+  listPosts$: Observable<IPost[]> = this.store.pipe(select('posts'))
+    .pipe(tap(res => {
+      this.totalItems = res.items.length;
+      this.selection.clear();
+      console.log(res)
+    }))
+    .pipe(map(state => {
+      console.log(state)
+      return state.pageItems;
+    }))
+
+  currentPage: number = 1;
+  limitPerPage: number = PAGINATION_PAGE_SIZE;
   totalItems: number;
 
   private _pageItems: BehaviorSubject<IPost[]> = new BehaviorSubject([]);
@@ -23,22 +38,25 @@ export class PostsComponent implements OnInit {
   }
 
   constructor(
+    private store: Store<{ posts: IPostState }>,
     private postsService: PostsService
   ) { }
 
   ngOnInit() {
-     this.postsService.getAll().subscribe(res => {
-      this.totalItems = res.length;
-      const result = res.slice(0, PAGINATION_PAGE_SIZE);
-      this._pageItems.next(result);
-    });
+    this.store.dispatch(postsAction.actionPostsGetItems({
+      page: this.currentPage,
+      limit: this.limitPerPage,
+      isGetAll: true
+    }));
   }
 
   changePageHandler(page: number) {
-    this.getListPostsPaging(page).subscribe(result => {
-      this._pageItems.next(result);
-      this.selection.clear();
-    });
+    this.currentPage = page;
+    this.store.dispatch(postsAction.actionPostsGetItems({
+      page: this.currentPage,
+      limit: this.limitPerPage,
+      isGetAll: false
+    }));
   }
 
   getListPostsPaging(curPage: number = 1) {

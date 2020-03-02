@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let post of pageItems | async">
+              <tr *ngFor="let post of listPosts$ | async">
                 <td>
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" [id]="post.id"

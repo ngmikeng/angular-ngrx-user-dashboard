@@ -31,4 +31,19 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  compare(v1, v2) {
+    return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+  }
+
+  sortHandler(items: IUser[], column: string, direction: string): IUser[] {
+    if (direction === '') {
+      return items;
+    } else {
+      return [...items].sort((a, b) => {
+        const res = this.compare(a[column], b[column]);
+        return direction === 'asc' ? res : -res;
+      });
+    }
+  }
+
 }
