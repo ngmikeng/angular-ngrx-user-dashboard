@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { PostsService } from '../../shared/services/posts.service';
 import { flatMap, tap, map } from 'rxjs/operators';
 import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 import { IPost } from '../../shared/models/post.model';
 import { Store, select } from '@ngrx/store';
 import * as postsAction from './posts.action';
-import { IPostState } from './posts.model';
+import { State } from '../pages.state';
 
 @Component({
   selector: 'app-posts',
@@ -16,15 +16,16 @@ import { IPostState } from './posts.model';
 })
 export class PostsComponent implements OnInit {
   selection = new SelectionModel<IPost>(true, []);
-  listPosts$: Observable<IPost[]> = this.store.pipe(select('posts'))
-    .pipe(tap(res => {
+  listPosts$: Observable<IPost[]> = this.store.pipe(select('pages'))
+    .pipe(tap(response => {
+      const res = response.posts;
       this.totalItems = res.items.length;
       this.selection.clear();
       console.log(res)
     }))
     .pipe(map(state => {
       console.log(state)
-      return state.pageItems;
+      return state.posts.pageItems;
     }))
 
   currentPage: number = 1;
@@ -38,7 +39,7 @@ export class PostsComponent implements OnInit {
   }
 
   constructor(
-    private store: Store<{ posts: IPostState }>,
+    private store: Store<State>,
     private postsService: PostsService
   ) { }
 
