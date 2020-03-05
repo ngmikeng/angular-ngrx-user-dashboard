@@ -8,6 +8,8 @@ import { IPost } from '../../shared/models/post.model';
 import { Store, select } from '@ngrx/store';
 import * as postsAction from './posts.action';
 import { State } from '../pages.state';
+import { selectPostsPageItems, selectPostsItemsLength, selectPostsSelectAllState, selectPostsSelectedItems } from './posts.selectors';
+import { ISelectedAllState } from './posts.model';
 
 @Component({
   selector: 'app-posts',
@@ -16,27 +18,17 @@ import { State } from '../pages.state';
 })
 export class PostsComponent implements OnInit {
   selection = new SelectionModel<IPost>(true, []);
-  listPosts$: Observable<IPost[]> = this.store.pipe(select('pages'))
-    .pipe(tap(response => {
-      const res = response.posts;
-      this.totalItems = res.items.length;
+  listPosts$: Observable<IPost[]> = this.store.pipe(select(selectPostsPageItems))
+    .pipe(tap(res => {
       this.selection.clear();
-      console.log(res)
-    }))
-    .pipe(map(state => {
-      console.log(state)
-      return state.posts.pageItems;
-    }))
+    }));
+  totalItems$: Observable<number> = this.store.pipe(select(selectPostsItemsLength))
+  selectedAllState$: Observable<ISelectedAllState> = this.store.pipe(select(selectPostsSelectAllState))
+  selectedItems$: Observable<IPost[]> = this.store.pipe(select(selectPostsSelectedItems));
 
   currentPage: number = 1;
   limitPerPage: number = PAGINATION_PAGE_SIZE;
-  totalItems: number;
-
-  private _pageItems: BehaviorSubject<IPost[]> = new BehaviorSubject([]);
-
-  get pageItems() {
-    return this._pageItems.asObservable();
-  }
+  selectedItems: IPost[] = [];
 
   constructor(
     private store: Store<State>,
@@ -49,6 +41,9 @@ export class PostsComponent implements OnInit {
       limit: this.limitPerPage,
       isGetAll: true
     }));
+    this.selectedItems$.subscribe(items => {
+      this.selectedItems = items;
+    });
   }
 
   changePageHandler(page: number) {
@@ -60,29 +55,16 @@ export class PostsComponent implements OnInit {
     }));
   }
 
-  getListPostsPaging(curPage: number = 1) {
-    const limit = PAGINATION_PAGE_SIZE;
-    return this.postsService.getAll(curPage, limit).pipe(flatMap(res => {
-      return of(res);
-    }));
+  toggleSelectAllItem() {
+    this.store.dispatch(postsAction.actionPostsToggleSelectAll({}));
   }
 
-  toggleSelectAllItem(event?, id?) {
-    if (this.isAllSelected()) {
-      this.selection.clear()
-    } else {
-      const newItems = this._pageItems.getValue().map(row => {
-        this.selection.select(row);
-        return row;
-      });
-    }
+  toggleSelectItem(item: IPost) {
+    this.store.dispatch(postsAction.actionPostsToggleSelectItem({ item }));
   }
 
-  isAllSelected() {
-    const items = this._pageItems.getValue();
-    const numSelected = this.selection.selected.length;
-    const numRows = items.length;
-    return numSelected === numRows;
+  isSelectedItem(post: IPost) {
+    return !!this.selectedItems.find(item => item.id === post.id);
   }
 
   createItem() {

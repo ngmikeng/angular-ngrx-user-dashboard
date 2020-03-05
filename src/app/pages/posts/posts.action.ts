@@ -11,3 +11,13 @@ export const actionPostsGetItemsSucceed = createAction(
   '[Posts] Get items succeed',
   props<{ posts: IPost[], isGetAll: boolean }>()
 );
+
+export const actionPostsToggleSelectItem = createAction(
+  '[Posts] Toggle select item',
+  props<{ item: IPost }>()
+);
+
+export const actionPostsToggleSelectAll = createAction(
+  '[Posts] Toggle select all',
+  props<{ }>()
+);

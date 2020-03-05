@@ -7,7 +7,7 @@ import { UsersComponent } from './users/users.component';
 import { PostsComponent } from './posts/posts.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { reducers } from './pages.state';
+import { reducers, FEATURE_NAME } from './pages.state';
 import { PostsEffects } from './posts/posts.effects';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { PostsEffects } from './posts/posts.effects';
     PagesRoutingModule,
 
     // ngrx
-    StoreModule.forFeature('pages', reducers),
+    StoreModule.forFeature(FEATURE_NAME, reducers),
     EffectsModule.forFeature([
       PostsEffects
     ]),

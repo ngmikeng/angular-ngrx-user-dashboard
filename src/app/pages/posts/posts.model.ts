@@ -5,3 +5,8 @@ export interface IPostState {
   pageItems: IPost[],
   selectedItems: IPost[]
 }
+
+export interface ISelectedAllState {
+  isSelectedAll: boolean,
+  isIndeterminate: boolean
+}

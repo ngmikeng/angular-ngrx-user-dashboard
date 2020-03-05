@@ -19,9 +19,9 @@
               <th>
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="checbox-all"
-                  (change)="$event ? toggleSelectAllItem() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  (change)="toggleSelectAllItem()"
+                  [checked]="(selectedAllState$ | async).isSelectedAll"
+                  [indeterminate]="(selectedAllState$ | async).isIndeterminate">
                   <label class="custom-control-label" for="checbox-all"></label>
                 </div>
               </th>
@@ -37,8 +37,8 @@
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" [id]="post.id"
                     (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(post) : null"
-                    [checked]="selection.isSelected(post)">
+                    (change)="toggleSelectItem(post)"
+                    [checked]="isSelectedItem(post)">
                     <label class="custom-control-label" [for]="post.id"></label>
                   </div>
                 </td>
@@ -52,7 +52,7 @@
       </div>
       <div class="col-12">
         <app-pagination
-          [collectionSize]="totalItems"
+          [collectionSize]="totalItems$ | async"
           (onChangePage)="changePageHandler($event)"
         >
         </app-pagination>
