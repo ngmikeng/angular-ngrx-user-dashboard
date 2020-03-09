@@ -6,7 +6,8 @@ import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 export const initialState: IPostState = {
   items: [],
   pageItems: [],
-  selectedItems: []
+  selectedItems: [],
+  page: ''
 };
 
 const reducer = createReducer(
@@ -18,7 +19,8 @@ const reducer = createReducer(
     return {
       ...state,
       items: payload.isGetAll ? [...payload.posts] : state.items,
-      pageItems: payload.isGetAll ? payload.posts.slice(0, PAGINATION_PAGE_SIZE) : [...payload.posts]
+      pageItems: payload.isGetAll ? payload.posts.slice(0, PAGINATION_PAGE_SIZE) : [...payload.posts],
+      page: payload.page
     }
   }),
   on(postsAction.actionPostsToggleSelectItem, (state, payload) => {

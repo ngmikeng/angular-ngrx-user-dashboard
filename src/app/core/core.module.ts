@@ -4,11 +4,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule, ActionReducer, MetaReducer } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { ApiService } from './services';
 import { reducers } from './core.state';
 import { PostsEffects } from '../pages/posts/posts.effects';
 import { environment } from '../../environments/environment';
+import { CustomSerializer } from './router/customer-serializer';
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -29,7 +31,10 @@ export const metaReducers: MetaReducer<any>[] = [debug];
     HttpClientModule,
 
     // ngrx
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers/*, { metaReducers }*/),
+    StoreRouterConnectingModule.forRoot({
+      serializer: CustomSerializer
+    }),
     EffectsModule.forRoot([
       PostsEffects
     ]),

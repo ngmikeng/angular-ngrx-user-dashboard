@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, filter, switchMap } from 'rxjs/operators';
 import { PostsService } from '../../shared/services/posts.service';
 import * as postsAction from './posts.action';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 
 @Injectable()
 export class PostsEffects {
@@ -15,14 +17,18 @@ export class PostsEffects {
 
   getItems$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(postsAction.actionPostsGetItems),
+      ofType(ROUTER_NAVIGATION, postsAction.actionPostsGetItems),
+      filter((n: any) => {
+        return n.payload.routerState.url.indexOf('posts') > -1
+      }),
       mergeMap((action) => {
-        const page = action.isGetAll ? undefined : action.page;
-        const limit = action.isGetAll ? undefined : action.limit;
+        const page = action.payload.routerState.queryParams.page;
+        const limit = page ? PAGINATION_PAGE_SIZE : undefined;
+        const isGetAll = !page;
         return this.postsService.getAll(page, limit)
           .pipe(
             map(posts => (
-              postsAction.actionPostsGetItemsSucceed({posts, isGetAll: action.isGetAll})
+              postsAction.actionPostsGetItemsSucceed({posts, isGetAll: isGetAll, page: page})
             )),
             catchError(() => of({ type: '[Posts] Get items error' }))
           )

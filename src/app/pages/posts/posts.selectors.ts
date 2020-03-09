@@ -14,7 +14,12 @@ export const selectPostsItems = createSelector(
 
 export const selectPostsItemsLength = createSelector(
   selectPostsItems,
-  (items) => items.length
+  (items) => 100 /*items.length*/
+)
+
+export const selectPostsCurrentPage = createSelector(
+  selectPostsState,
+  (state: IPostState) => state.page
 )
 
 export const selectPostsPageItems = createSelector(

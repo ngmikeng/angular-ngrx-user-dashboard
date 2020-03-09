@@ -9,7 +9,7 @@ export const actionPostsGetItems = createAction(
 
 export const actionPostsGetItemsSucceed = createAction(
   '[Posts] Get items succeed',
-  props<{ posts: IPost[], isGetAll: boolean }>()
+  props<{ posts: IPost[], isGetAll: boolean, page: string }>()
 );
 
 export const actionPostsToggleSelectItem = createAction(

@@ -3,7 +3,8 @@ import { IPost } from '../../shared/models/post.model';
 export interface IPostState {
   items: IPost[],
   pageItems: IPost[],
-  selectedItems: IPost[]
+  selectedItems: IPost[],
+  page?: string
 }
 
 export interface ISelectedAllState {

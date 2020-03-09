@@ -8,8 +8,10 @@ import { IPost } from '../../shared/models/post.model';
 import { Store, select } from '@ngrx/store';
 import * as postsAction from './posts.action';
 import { State } from '../pages.state';
-import { selectPostsPageItems, selectPostsItemsLength, selectPostsSelectAllState, selectPostsSelectedItems } from './posts.selectors';
+import { selectPostsPageItems, selectPostsItemsLength, selectPostsSelectAllState, selectPostsSelectedItems, selectPostsCurrentPage } from './posts.selectors';
 import { ISelectedAllState } from './posts.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { selectRouterState } from '../../core/core.state';
 
 @Component({
   selector: 'app-posts',
@@ -25,6 +27,7 @@ export class PostsComponent implements OnInit {
   totalItems$: Observable<number> = this.store.pipe(select(selectPostsItemsLength))
   selectedAllState$: Observable<ISelectedAllState> = this.store.pipe(select(selectPostsSelectAllState))
   selectedItems$: Observable<IPost[]> = this.store.pipe(select(selectPostsSelectedItems));
+  currentPage$: Observable<string> = this.store.pipe(select(selectPostsCurrentPage));
 
   currentPage: number = 1;
   limitPerPage: number = PAGINATION_PAGE_SIZE;
@@ -32,27 +35,21 @@ export class PostsComponent implements OnInit {
 
   constructor(
     private store: Store<State>,
-    private postsService: PostsService
+    private router: Router,
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(postsAction.actionPostsGetItems({
-      page: this.currentPage,
-      limit: this.limitPerPage,
-      isGetAll: true
-    }));
     this.selectedItems$.subscribe(items => {
       this.selectedItems = items;
     });
   }
 
   changePageHandler(page: number) {
-    this.currentPage = page;
-    this.store.dispatch(postsAction.actionPostsGetItems({
-      page: this.currentPage,
-      limit: this.limitPerPage,
-      isGetAll: false
-    }));
+    this.router.navigate(['pages/posts'], {
+      queryParams: {
+        page: page
+      }
+    });
   }
 
   toggleSelectAllItem() {

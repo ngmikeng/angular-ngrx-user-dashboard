@@ -52,6 +52,7 @@
       </div>
       <div class="col-12">
         <app-pagination
+          [page]="currentPage$ | async"
           [collectionSize]="totalItems$ | async"
           (onChangePage)="changePageHandler($event)"
         >
