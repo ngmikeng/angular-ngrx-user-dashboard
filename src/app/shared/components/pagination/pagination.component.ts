@@ -9,16 +9,20 @@ import { PAGINATION_PAGE_SIZE } from '../../helpers/app.constants';
 export class PaginationComponent implements OnInit {
 
   _collectionSize: number;
+  _page: number = 1;
 
   constructor() { }
 
   @Input()
   set collectionSize(size: number) { // total number of items
-    console.log(size);
     this._collectionSize = size;
   }
   @Input()
-  page: number = 1; // current page
+  set page(n: number) { // current page
+    if (n) {
+      this._page = n;
+    }
+  }
   @Input()
   pageSize: number = PAGINATION_PAGE_SIZE; // number of items per page
 

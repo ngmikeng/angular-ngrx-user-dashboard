@@ -22,13 +22,27 @@ export class PostsEffects {
         return n.payload.routerState.url.indexOf('posts') > -1
       }),
       mergeMap((action) => {
-        const page = action.payload.routerState.queryParams.page;
-        const limit = page ? PAGINATION_PAGE_SIZE : undefined;
-        const isGetAll = !page;
+        const page = action.payload.routerState.queryParams.page * 1 || 1;
+        const limit = PAGINATION_PAGE_SIZE;
         return this.postsService.getAll(page, limit)
           .pipe(
             map(posts => (
-              postsAction.actionPostsGetItemsSucceed({posts, isGetAll: isGetAll, page: page})
+              postsAction.actionPostsGetItemsSucceed({posts, page: page})
+            )),
+            catchError(() => of({ type: '[Posts] Get items error' }))
+          )
+      }
+    )
+  ));
+
+  getTotalItems$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(postsAction.actionPostsGetTotalItems),
+      mergeMap((action) => {
+        return this.postsService.getAll()
+          .pipe(
+            map(posts => (
+              postsAction.actionPostsGetTotalItemsSucceed({ posts, total: posts.length })
             )),
             catchError(() => of({ type: '[Posts] Get items error' }))
           )

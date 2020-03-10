@@ -4,7 +4,8 @@ export interface IPostState {
   items: IPost[],
   pageItems: IPost[],
   selectedItems: IPost[],
-  page?: string
+  page: number,
+  total: number
 }
 
 export interface ISelectedAllState {

@@ -4,12 +4,21 @@ import { IPost } from '../../shared/models/post.model';
 
 export const actionPostsGetItems = createAction(
   '[Posts] Get items',
-  props<{ page: number, limit: number, isGetAll: boolean }>()
+  props<{ page: number, limit: number }>()
 );
 
 export const actionPostsGetItemsSucceed = createAction(
   '[Posts] Get items succeed',
-  props<{ posts: IPost[], isGetAll: boolean, page: string }>()
+  props<{ posts: IPost[], page: number }>()
+);
+
+export const actionPostsGetTotalItems = createAction(
+  '[Posts] Get total items'
+);
+
+export const actionPostsGetTotalItemsSucceed = createAction(
+  '[Posts] Get total items succeed',
+  props<{ posts: IPost[], total: number }>()
 );
 
 export const actionPostsToggleSelectItem = createAction(

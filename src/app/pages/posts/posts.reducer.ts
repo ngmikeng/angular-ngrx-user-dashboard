@@ -7,7 +7,8 @@ export const initialState: IPostState = {
   items: [],
   pageItems: [],
   selectedItems: [],
-  page: ''
+  page: 1,
+  total: 0
 };
 
 const reducer = createReducer(
@@ -15,12 +16,21 @@ const reducer = createReducer(
   on(postsAction.actionPostsGetItems, (state, payload) => ({
     ...state
   })),
+  on(postsAction.actionPostsGetTotalItems, (state, payload) => ({
+    ...state
+  })),
   on(postsAction.actionPostsGetItemsSucceed, (state, payload) => {
     return {
       ...state,
-      items: payload.isGetAll ? [...payload.posts] : state.items,
-      pageItems: payload.isGetAll ? payload.posts.slice(0, PAGINATION_PAGE_SIZE) : [...payload.posts],
+      pageItems: payload.posts,
       page: payload.page
+    }
+  }),
+  on(postsAction.actionPostsGetTotalItemsSucceed, (state, payload) => {
+    return {
+      ...state,
+      items: payload.posts,
+      total: payload.total
     }
   }),
   on(postsAction.actionPostsToggleSelectItem, (state, payload) => {

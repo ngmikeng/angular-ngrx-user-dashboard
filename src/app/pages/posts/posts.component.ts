@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { PostsService } from '../../shared/services/posts.service';
-import { flatMap, tap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 import { IPost } from '../../shared/models/post.model';
 import { Store, select } from '@ngrx/store';
 import * as postsAction from './posts.action';
 import { State } from '../pages.state';
-import { selectPostsPageItems, selectPostsItemsLength, selectPostsSelectAllState, selectPostsSelectedItems, selectPostsCurrentPage } from './posts.selectors';
+import { selectPostsPageItems, selectPostsSelectAllState, selectPostsSelectedItems, selectPostsCurrentPage, selectPostsTotalItems } from './posts.selectors';
 import { ISelectedAllState } from './posts.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { selectRouterState } from '../../core/core.state';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts',
@@ -19,17 +15,12 @@ import { selectRouterState } from '../../core/core.state';
   styleUrls: ['./posts.component.scss']
 })
 export class PostsComponent implements OnInit {
-  selection = new SelectionModel<IPost>(true, []);
-  listPosts$: Observable<IPost[]> = this.store.pipe(select(selectPostsPageItems))
-    .pipe(tap(res => {
-      this.selection.clear();
-    }));
-  totalItems$: Observable<number> = this.store.pipe(select(selectPostsItemsLength))
+  listPosts$: Observable<IPost[]> = this.store.pipe(select(selectPostsPageItems));
+  totalItems$: Observable<number> = this.store.pipe(select(selectPostsTotalItems));
   selectedAllState$: Observable<ISelectedAllState> = this.store.pipe(select(selectPostsSelectAllState))
   selectedItems$: Observable<IPost[]> = this.store.pipe(select(selectPostsSelectedItems));
-  currentPage$: Observable<string> = this.store.pipe(select(selectPostsCurrentPage));
+  currentPage$: Observable<number> = this.store.pipe(select(selectPostsCurrentPage));
 
-  currentPage: number = 1;
   limitPerPage: number = PAGINATION_PAGE_SIZE;
   selectedItems: IPost[] = [];
 
@@ -39,17 +30,21 @@ export class PostsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // get total items
+    this.store.dispatch(postsAction.actionPostsGetTotalItems());
     this.selectedItems$.subscribe(items => {
       this.selectedItems = items;
     });
   }
 
   changePageHandler(page: number) {
-    this.router.navigate(['pages/posts'], {
-      queryParams: {
-        page: page
-      }
-    });
+    if (page) {
+      this.router.navigate(['pages/posts'], {
+        queryParams: {
+          page: page
+        }
+      });
+    }
   }
 
   toggleSelectAllItem() {
@@ -69,7 +64,7 @@ export class PostsComponent implements OnInit {
   }
 
   deleteItems() {
-    console.log(this.selection.selected);
+
   }
 
 }
