@@ -7,8 +7,3 @@ export interface IPostState {
   page: number,
   total: number
 }
-
-export interface ISelectedAllState {
-  isSelectedAll: boolean,
-  isIndeterminate: boolean
-}

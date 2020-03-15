@@ -3,10 +3,9 @@ import { Observable } from 'rxjs';
 import { PAGINATION_PAGE_SIZE } from '../../shared/helpers/app.constants';
 import { IPost } from '../../shared/models/post.model';
 import { Store, select } from '@ngrx/store';
-import * as postsAction from './posts.action';
-import { State } from '../pages.state';
+import * as postsAction from './posts.actions';
+import { State, ISelectedAllState } from '../pages.state';
 import { selectPostsPageItems, selectPostsSelectAllState, selectPostsSelectedItems, selectPostsCurrentPage, selectPostsTotalItems } from './posts.selectors';
-import { ISelectedAllState } from './posts.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,7 +20,6 @@ export class PostsComponent implements OnInit {
   selectedItems$: Observable<IPost[]> = this.store.pipe(select(selectPostsSelectedItems));
   currentPage$: Observable<number> = this.store.pipe(select(selectPostsCurrentPage));
 
-  limitPerPage: number = PAGINATION_PAGE_SIZE;
   selectedItems: IPost[] = [];
 
   constructor(

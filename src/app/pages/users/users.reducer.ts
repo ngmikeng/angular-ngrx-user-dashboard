@@ -1,8 +1,8 @@
-import { IPostState } from './posts.model';
+import { IUserState } from './users.model';
 import { createReducer, on, Action } from '@ngrx/store';
-import * as postsAction from './posts.actions';
+import * as usersAction from './users.actions';
 
-export const initialState: IPostState = {
+export const initialState: IUserState = {
   items: [],
   pageItems: [],
   selectedItems: [],
@@ -12,27 +12,27 @@ export const initialState: IPostState = {
 
 const reducer = createReducer(
   initialState,
-  on(postsAction.actionPostsGetItems, (state, payload) => ({
+  on(usersAction.actionUsersGetItems, (state, payload) => ({
     ...state
   })),
-  on(postsAction.actionPostsGetTotalItems, (state, payload) => ({
+  on(usersAction.actionUsersGetTotalItems, (state, payload) => ({
     ...state
   })),
-  on(postsAction.actionPostsGetItemsSucceed, (state, payload) => {
+  on(usersAction.actionUsersGetItemsSucceed, (state, payload) => {
     return {
       ...state,
-      pageItems: payload.posts,
+      pageItems: payload.users,
       page: payload.page
     }
   }),
-  on(postsAction.actionPostsGetTotalItemsSucceed, (state, payload) => {
+  on(usersAction.actionUsersGetTotalItemsSucceed, (state, payload) => {
     return {
       ...state,
-      items: payload.posts,
+      items: payload.users,
       total: payload.total
     }
   }),
-  on(postsAction.actionPostsToggleSelectItem, (state, payload) => {
+  on(usersAction.actionUsersToggleSelectItem, (state, payload) => {
     let selectedItems = [...state.selectedItems];
     const checkedItem = selectedItems.find(item => item.id === payload.item.id);
     if (checkedItem) {
@@ -46,7 +46,7 @@ const reducer = createReducer(
       selectedItems: selectedItems
     }
   }),
-  on(postsAction.actionPostsToggleSelectAll, (state, payload) => {
+  on(usersAction.actionUsersToggleSelectAll, (state, payload) => {
     let selectedItems = [...state.selectedItems];
     const curPageIds = state.pageItems.map(item => item.id);
     const selectedItemsInPage = state.selectedItems.filter(item => curPageIds.includes(item.id));
@@ -65,6 +65,6 @@ const reducer = createReducer(
   }),
 )
 
-export function postsReducer(state: IPostState | undefined, action: Action) {
+export function usersReducer(state: IUserState | undefined, action: Action) {
   return reducer(state, action);
 }

@@ -11,6 +11,7 @@ import { reducers } from './core.state';
 import { PostsEffects } from '../pages/posts/posts.effects';
 import { environment } from '../../environments/environment';
 import { CustomSerializer } from './router/customer-serializer';
+import { UsersEffects } from '../pages/users/users.effects';
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -36,7 +37,8 @@ export const metaReducers: MetaReducer<any>[] = [debug];
       serializer: CustomSerializer
     }),
     EffectsModule.forRoot([
-      PostsEffects
+      PostsEffects,
+      UsersEffects
     ]),
 
     // Instrumentation must be imported after importing StoreModule (config is optional)
